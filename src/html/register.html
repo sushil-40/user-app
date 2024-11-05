@@ -27,7 +27,12 @@
       <hr />
 
       <div class="container mt-5">
-        <form class="shadow-lg p-4 rounded">
+        <form
+          method="post"
+          action="/registration"
+          enctype="application/x-www-form-urlencoded"
+          class="shadow-lg p-4 rounded"
+        >
           <h3>Register Now !</h3>
           <hr />
           <div class="mb-3">
@@ -36,8 +41,8 @@
               type="text"
               name="name"
               class="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
+              id="exampleInputName"
+              aria-describedby="nameHelp"
             />
           </div>
           <div class="mb-3">

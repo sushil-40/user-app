@@ -21,6 +21,7 @@ console.log(__dirname, "====");
 
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(express.urlencoded({ extended: true }));
 // home page controller
 
 app.get("/", (req, res) => {
@@ -31,6 +32,13 @@ app.get("/", (req, res) => {
 // user registration controller
 app.get("/registration", (req, res) => {
   console.log("req received registration");
+  console.log(req.query);
+  res.sendFile(__dirname + "/src/html/register.html");
+});
+
+app.post("/registration", (req, res) => {
+  console.log("req received registration");
+  console.log(req.body);
   res.sendFile(__dirname + "/src/html/register.html");
 });
 
