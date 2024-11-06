@@ -13,6 +13,8 @@ const PORT = 8000;
 // });
 
 import path from "path";
+//importing file system
+import fs from "fs";
 
 const __dirname = path.resolve();
 console.log(__dirname, "====");
@@ -36,9 +38,24 @@ app.get("/registration", (req, res) => {
   res.sendFile(__dirname + "/src/html/register.html");
 });
 
+const fileName = "userList.csv";
 app.post("/registration", (req, res) => {
   console.log("req received registration");
-  console.log(req.body);
+  const { name, email, password } = req.body;
+  // console.log(req.body);
+  const str = `${name},${email},${password} \n`;
+
+  // console.log(str.split(","));
+
+  // Create File abd wrute data
+  fs.appendFile(fileName, str, (error) => {
+    error ? res.send(error.message) : res.redirect("/");
+    // : res.send(`<h1 className="alert alert-success">
+    //   Data has been writen in the File. You may login now !
+    // </h1>`);
+    // ? console.log(error)
+    // : console.log("Data has been writen in the File.");
+  });
   res.sendFile(__dirname + "/src/html/register.html");
 });
 
