@@ -15,7 +15,7 @@ const PORT = 8000;
 import path from "path";
 //importing file system
 import fs from "fs";
-
+import { makeHtmlString } from "./src/fileMerger.js";
 const __dirname = path.resolve();
 console.log(__dirname, "====");
 
@@ -24,11 +24,23 @@ console.log(__dirname, "====");
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.urlencoded({ extended: true }));
+
 // home page controller
 
 app.get("/", (req, res) => {
-  console.log("req received");
-  res.sendFile(__dirname + "/src/html/index.html");
+  //reading the text file
+  fs.readFile(fileName, "utf8", (error, data) => {
+    if (error) {
+      console.log(error);
+      res.sendFile(__dirname + "/src/html/index.html");
+    } else {
+      console.log(data.split("\n"));
+      res.send(makeHtmlString(data.split("\n")));
+    }
+  });
+
+  //   console.log("req received");
+  //   res.sendFile(__dirname + "/src/html/index.html");
 });
 
 // user registration controller
@@ -65,6 +77,27 @@ app.get("/login", (req, res) => {
   res.sendFile(__dirname + "/src/html/login.html");
 });
 
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  const str = email + "," + password;
+
+  //read data from the file
+  fs.readFile(fileName, "utf-8", (error, data) => {
+    if (error) {
+      console.log(error);
+      res.send("");
+    } else {
+      const person = data.split("\n").find((user) => user.includes(str));
+      person?.length
+        ? res.send(
+            `<h1> Hey ${
+              person.split(",")[0]
+            }, You have successfully logged in.</h1>`
+          )
+        : res.send(`<h1>Error, Invalid Login Details </h1>`);
+    }
+  });
+});
 // app.get("/get-user", (req, res) => {
 //   res.json({
 //     fName: "Susil",
